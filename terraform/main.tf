@@ -5,5 +5,4 @@ module "networking" {
 
 module "lambda" {
   source = "./lambda"
-  region = var.region
 } 

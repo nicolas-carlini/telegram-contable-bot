@@ -23,6 +23,8 @@ jobs:
       - name: ls
         run: ls
       - name: terraform init
+        run: terraform init
+      - name: terraform plan
         run: terraform && terraform plan -out=plan.txt
       - name: terraform_plan
         run: echo "::set-output name=PLAN::$(cat plan.txt)\n"

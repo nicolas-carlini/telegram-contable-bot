@@ -1,9 +1,13 @@
 name: Plan Terraform
 
-on: issue_comment
+on:
+  issue_comment:
+    types:
+      - created
 
 jobs:
   plan:
+    if: ${{ github.event.issue.pull_request && contains(github.event.comment.body, 'terraform plan') }}
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@master

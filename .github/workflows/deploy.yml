@@ -1,5 +1,4 @@
-name: 'Plan Terraform'
-description: 'plan terraform'
+name: Plan Terraform
 
 on:
   push:

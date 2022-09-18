@@ -26,7 +26,7 @@ jobs:
         run: cd terraform && terraform init
       - name: terraform_plan
         run: |
-          plan=$(cd terraform && terraform plan -out=plan.txt)
+          plan=$(cd terraform && terraform plan)
           echo "::set-output name=PLAN::$(echo ${plan})\n"
       - name: read plan
         run: echo "${{ steps.terraform_plan.outputs.PLAN }}"

@@ -38,4 +38,3 @@ jobs:
               comment_id: context.payload.comment.id,
               body: '${{ steps.run_tests.outputs.plan }}'
             });
-      

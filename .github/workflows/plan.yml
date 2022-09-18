@@ -25,9 +25,9 @@ jobs:
       - name: terraform init
         run: cd terraform && terraform init
       - name: terraform_plan
-        run: echo "::set-output name=plan::$(cd terraform && terraform plan)\n"
-      - name: terraform plan
-        run: echo "${{ steps.terraform_plan.outputs.plan }}"
+        run: echo "::set-output name=PLAN::$(cd terraform && terraform plan)\n"
+      - name: read plan
+        run: echo "${{ steps.terraform_plan.outputs.PLAN }}"
       - uses: actions/github-script@v6
         with:
           script: |
@@ -36,5 +36,5 @@ jobs:
               owner,
               repo,
               comment_id: context.payload.comment.id,
-              body: '${{ steps.terraform_plan.outputs.plan }}'
+              body: '${{ steps.terraform_plan.outputs.PLAN }}'
             });

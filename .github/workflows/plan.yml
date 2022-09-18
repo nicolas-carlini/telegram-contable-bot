@@ -1,25 +1,39 @@
-name: 'Plan Terraform'
-description: 'plan terraform'
+name: Plan Terraform
 
 on:
-  push:
-    branches:
-      - stage
+  issue_comment:
+    types:
+      - created
 
 jobs:
   plan:
+    if: ${{ contains(github.event.comment.body, 'terraform plan') }}
     runs-on: ubuntu-latest
     steps:
+      - uses: actions/checkout@master
       - uses: hashicorp/setup-terraform@v2
         with:
           terraform_version: 1.2.9
       - name: Configure AWS Credentials
         uses: aws-actions/configure-aws-credentials@v1
         with:
-          aws-access-key-id: ${{ secrets.AWS_SECRET_KEY }}
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           aws-region: us-east-2
+      - name: ls
+        run: ls
       - name: terraform init
         run: cd terraform && terraform init
       - name: terraform plan
-        run: cd terraform && terraform plan
+        run: echo "::set-output name=plan::$(cd terraform && terraform plan)\n"
+
+      - uses: actions/github-script@v6
+        with:
+          script: |
+            github.rest.issues.createComment({
+              issue_number: context.issue.number,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              body: '${{ steps.run_tests.outputs.plan }}'
+            })
+      

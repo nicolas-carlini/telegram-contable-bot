@@ -26,14 +26,15 @@ jobs:
         run: cd terraform && terraform init
       - name: terraform plan
         run: echo "::set-output name=plan::$(cd terraform && terraform plan)\n"
-
+      - name: terraform plan
+        run: echo "${{ steps.run_tests.outputs.plan }}"
       - uses: actions/github-script@v6
         with:
           script: |
-            github.rest.issues.createComment({
-              issue_number: context.issue.number,
-              owner: context.repo.owner,
-              repo: context.repo.repo,
+            const {owner, repo} = context.issue
+            github.reactions.createForIssueComment({
+              owner,
+              repo,
+              comment_id: context.payload.comment.id,
               body: '${{ steps.run_tests.outputs.plan }}'
-            })
-      
+            });

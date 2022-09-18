@@ -24,10 +24,10 @@ jobs:
         run: ls
       - name: terraform init
         run: cd terraform && terraform init
-      - name: terraform plan
-        run: cd terraform && terraform plan -out=plan.txt
       - name: terraform_plan
-        run: echo "::set-output name=PLAN::$(cat terraform/plan.txt)\n"
+        run: |
+          plan=$(cd terraform && terraform plan -out=plan.txt)
+          echo "::set-output name=PLAN::$(echo ${plan})\n"
       - name: read plan
         run: echo "${{ steps.terraform_plan.outputs.PLAN }}"
       - uses: actions/github-script@v6

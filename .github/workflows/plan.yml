@@ -38,4 +38,3 @@ jobs:
               comment_id: context.payload.comment.id,
               body: '${{ steps.terraform_plan.outputs.PLAN }}'
             });
-      
